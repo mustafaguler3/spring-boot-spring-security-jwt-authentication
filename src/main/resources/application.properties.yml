@@ -1,0 +1,14 @@
+jwt:
+  secret: 'dasewr?jvfdEWRDSVXCVqwerifrregYJYHNaADEFSvFefrg'
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/userportal
+    password: 05377048490m
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
