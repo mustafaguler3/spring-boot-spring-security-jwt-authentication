@@ -1,9 +1,9 @@
 jwt:
-  secret: 'dasewr?jvfdEWRDSVXCVqwerifrregYJYHNaADEFSvFefrg'
-
+  secret: mySecretKey
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/userportal
+    username: root
     password: 05377048490m
   jpa:
     show-sql: true

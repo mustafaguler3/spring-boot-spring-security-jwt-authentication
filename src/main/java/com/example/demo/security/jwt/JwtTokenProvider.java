@@ -4,11 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.example.demo.security.services.UserDetailsImpl;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.example.demo.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +17,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.security.Key;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,8 +29,8 @@ public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    //@Value("${jwt.secret}")
+    private String jwtSecret = "adsafasfasfrsgdfbfhftghnf";
 
     public String generateJwtToken(UserDetailsImpl userDetails){
         String[] claims = getClaimsFromUser(userDetails);
@@ -47,7 +41,7 @@ public class JwtTokenProvider {
                 .withIssuedAt(new Date()).withSubject(userDetails.getUsername())
                 .withArrayClaim("Authorities",claims)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 432_000_000))
-                .sign(Algorithm.HMAC512(jwtSecret.getBytes()));
+                .sign(Algorithm.HMAC256(jwtSecret.getBytes()));
     }
 
     public List<GrantedAuthority> getAuthorities(String token){
