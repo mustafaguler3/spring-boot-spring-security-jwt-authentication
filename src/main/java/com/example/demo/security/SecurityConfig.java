@@ -1,19 +1,14 @@
 package com.example.demo.security;
 
 import com.example.demo.constants.SecurityConstant;
-import com.example.demo.security.jwt.JwtAccessDeniedHandler;
-import com.example.demo.security.jwt.JwtAuthenticationEntryPoint;
+import com.example.demo.filter.JwtAccessDeniedHandler;
+import com.example.demo.filter.JwtAuthenticationEntryPoint;
 
-import com.example.demo.security.jwt.JwtAuthorizationFilter;
-import jakarta.servlet.Filter;
+import com.example.demo.filter.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,7 +50,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless session management
                 .and()
                 .authorizeRequests()
-                .requestMatchers(SecurityConstant.PUBLIC_URLS).permitAll() // Allow access to public URLs
+                .antMatchers(SecurityConstant.PUBLIC_URLS).permitAll() // Allow access to public URLs
                 .anyRequest().authenticated() // Require authentication for all other requests
                 .and()
                 .exceptionHandling()

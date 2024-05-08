@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,26 +22,51 @@ public class ExceptionHandling{
 
     @ExceptionHandler(EmailExistException.class)
     public ResponseEntity<HttpResponse> emailExistsException(EmailNotFoundException ex){
-        return createHttpResponse(HttpStatus.BAD_REQUEST,ex.getMessage());
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(300);
+        httpResponse.setReason(ex.getLocalizedMessage().toUpperCase());
+        httpResponse.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(httpResponse,HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<HttpResponse> accountDisabledException(EmailNotFoundException ex){
-        return createHttpResponse(HttpStatus.BAD_REQUEST,ACCOUNT_DISABLED);
+    public ResponseEntity<HttpResponse> accountDisabledException(DisabledException ex){
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(403);
+        httpResponse.setReason(ex.getLocalizedMessage().toUpperCase());
+        httpResponse.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(httpResponse,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<HttpResponse> tokenExpiredException(TokenExpiredException ex){
-        return createHttpResponse(HttpStatus.BAD_REQUEST,ex.getMessage());
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(404);
+        httpResponse.setReason(ex.getLocalizedMessage().toUpperCase());
+        httpResponse.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(httpResponse,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UsernameExistException.class)
     public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException ex){
-        return createHttpResponse(HttpStatus.BAD_REQUEST,ex.getMessage());
-    }
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(300);
+        httpResponse.setReason(ex.getLocalizedMessage().toUpperCase());
+        httpResponse.setMessage(ex.getMessage());
 
-    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus status,String message){
-        return new ResponseEntity<>(new HttpResponse(status.value(),status,status.getReasonPhrase(),message.toUpperCase()),status);
+        return new ResponseEntity<>(httpResponse,HttpStatus.BAD_GATEWAY);
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<HttpResponse> usernameNotFoundException(UsernameNotFoundException ex){
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(404);
+        httpResponse.setReason(ex.getLocalizedMessage().toUpperCase());
+        httpResponse.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(httpResponse,HttpStatus.NOT_FOUND);
     }
 }
 

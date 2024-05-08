@@ -1,7 +1,6 @@
-package com.example.demo.security.jwt;
+package com.example.demo.filter;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.demo.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
+    protected void doFilterInternal(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, javax.servlet.FilterChain filterChain) throws javax.servlet.ServletException, IOException {
         if (request.getMethod().equalsIgnoreCase("OPTIONS")){
             response.setStatus(OK);
         }else {
@@ -43,7 +41,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (tokenProvider.isTokenValid(username,token) && SecurityContextHolder.getContext().getAuthentication() == null){
                 List<GrantedAuthority> authorities = tokenProvider.getAuthorities(token);
-                Authentication authentication = tokenProvider.getAuthentication(username,authorities,request);
+                Authentication authentication = tokenProvider.getAuthentication(username,authorities, request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else {
                 SecurityContextHolder.clearContext();
@@ -51,6 +49,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+
 }
 
 
